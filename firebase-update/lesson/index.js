@@ -37,6 +37,7 @@ firebase.database().ref("update_words_two").on("value", function(snapshot){
 
 //This is another way to set a key/value pair
 //key being "0", and value being "update"
+// var update = {"0": "update"};
 var update = {}
 update["0"] = "update";
 console.log(update)
@@ -50,4 +51,19 @@ firebase.database().ref("update_words_two").on("value", function(snapshot){
 	console.log(snapshot.val())
 	//getting all of the keys in the array
 	console.log(Object.keys(snapshot.val()))
+});
+
+// adding dynamically to the array in firebase
+firebase.database().ref("update_words_two").push("word up");
+
+//getting the current value of the "update_words_two" ref after update
+firebase.database().ref("update_words_two").on("value", function(snapshot){
+	snapshot.forEach((childSnapshot) => {
+		// updating a value in the firebase array dynamically, without knowing the key
+		if(childSnapshot.val() == "word up"){
+			var updateTwo = {};
+			updateTwo[childSnapshot.key] = "bird up";
+			firebase.database().ref("update_words_two").update(updateTwo)
+		}
+	})
 });
